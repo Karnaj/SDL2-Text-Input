@@ -1,3 +1,3 @@
-Ce code nécessite la SDL 2.0.3 pour fonctionner. Le makefile fonctionne sous Windows.
+Ce code nécessite la SDL 2.0.3 pour fonctionner. Le makefile fonctionne sous Windows en plaçant les fichiers d'entête de la SDL 2 dans le dossier `include/SDL2` et les fichiers `.a` dans le dossier `lib`. Sous Linux, on peut utiliser la commande ``gcc -o programe main.c `sdl2-config --cflags --libs` `` après avoir installé le paquet de développement de la SDL 2.
 
 Il s'agit d'un simple programme qui gère l'entrée de texte et affiche le texte entré sur la sortie standard. Il gère également la suppression de texte, la copie et le collage (via les touches Ctrl + C et Ctrl + V). On quitte le programme normalement ou en appuyant sur la touche Echap.

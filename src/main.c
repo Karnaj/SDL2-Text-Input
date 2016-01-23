@@ -1,11 +1,20 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <string.h>
-#define LEN_MAX 80
+#define LEN_MAX 10
 
-void copier(char *src, char *dst, int len)
+SDL_Window *Init(void)
 {
-	while(len-- && (*dst++ = *src++));
+   SDL_Window *window;
+   if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
+		return NULL;
+	}
+	window = SDL_CreateWindow("Personnage 1.0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, SDL_WINDOW_SHOWN);
+	if(NULL == window)
+		fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
+   return window;
 }
 
 int main(int argc, char* args[])
@@ -13,19 +22,11 @@ int main(int argc, char* args[])
 	SDL_Window *window = NULL;
 	int quit = SDL_FALSE;
 	char rep[LEN_MAX] = {0};
-	int len = 0, l;
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
-		goto Fin;
-	}
-	window = SDL_CreateWindow("Personnage 1.0", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 500, 500, SDL_WINDOW_SHOWN);
-	if(NULL == window)
-	{
-		fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
-		goto Quit;
-	}
+	size_t len = 0, l;
+
 	SDL_Event event;
+	if(window = Init() == NULL)
+      goto Quit;
 	SDL_StartTextInput();
 	while(!quit)
 	{
@@ -45,16 +46,11 @@ int main(int argc, char* args[])
 			{
 				char *tmp = SDL_GetClipboardText();
 				l = strlen(tmp);
-				if(LEN_MAX - 1 - len - l > 0)
-				{
-					copier(tmp, (rep + len), l);
-					len += l;
-				}
-				else
-				{
-					copier(tmp, (rep + len), LEN_MAX - 1 - len);
-					len = LEN_MAX - 1;
-				}
+				strncpy(rep + len, tmp, LEN_MAX - 1 - len);
+            len += l;
+            if(len > len > LEN_MAX - 1)
+               len = LEN_MAX - 1;
+				SDL_free(tmp);
 			}
 			if(event.key.keysym.sym == SDLK_c && (SDL_GetModState() & KMOD_CTRL))
 				SDL_SetClipboardText(rep);
@@ -62,18 +58,12 @@ int main(int argc, char* args[])
 		else if(event.type == SDL_TEXTINPUT)
 		{
 			l = strlen(event.text.text);
-			if(LEN_MAX - 1 - len - l > 0)
-			{
-				copier(event.text.text, (rep + len), l);
-				len += l;
-			}
-			else
-			{
-				copier(event.text.text, (rep + len), LEN_MAX - 1 - len);
-				len = LEN_MAX - 1;
-			}
+			strncpy(rep + len, event.text.text, LEN_MAX - 1 - len);
+         len += l;
+			if(len > LEN_MAX - 1)
+            len = LEN_MAX - 1;
 		}
-		printf("%s\n", rep);
+      puts(rep);
 	}
 	SDL_StopTextInput();
 Quit:

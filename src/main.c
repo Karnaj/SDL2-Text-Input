@@ -4,9 +4,9 @@
 #define LEN_MAX 80
 #undef main
 
-int run(void);
+void run(void);
 
-int run(void)
+void run(void)
 {
 	char rep[LEN_MAX + 1] = {0};
 	size_t len = 0;
@@ -50,7 +50,6 @@ int run(void)
 		if(has_type)
 			puts(rep);
 	}
-	return 1;
 }
 
 int main(void)

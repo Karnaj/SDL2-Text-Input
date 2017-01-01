@@ -1,16 +1,10 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <string.h>
-#define LEN_MAX 10
+#define LEN_MAX 80
 #undef main
 
 int run(void);
-void copy(char *src, char *dst, int len);
-void copy(char *src, char *dst, int len)
-{
-	while(len-- && (*dst++ = *src++));
-}
-
 
 int run(void)
 {
